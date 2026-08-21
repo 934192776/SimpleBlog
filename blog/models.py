@@ -4,15 +4,16 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+# 设计"表格结构" 就像Excel的表头设计
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-
+# 分类表
 class Category(models.Model):
     name = models.CharField(max_length=100)
+    # ↑ 分类名
 
     def __str__(self):
         return self.name
