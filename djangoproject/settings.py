@@ -29,7 +29,11 @@ SECRET_KEY = 'django-insecure-efh1y15^x+v-b((dl)79k@redlax7hy=+fq*g^um%m!0)twkx9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["simpleblog-mf3u.onrender.com",
+                 "localhost",
+                 "127.0.0.1"
+
+                 ]
 
 
 # Application definition
