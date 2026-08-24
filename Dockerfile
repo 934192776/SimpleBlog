@@ -10,4 +10,4 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-CMD gunicorn djangoproject.wsgi --bind 0.0.0.0:$PORT
+CMD python manage.py migrate && gunicorn djangoproject.wsgi:application

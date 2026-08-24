@@ -3,12 +3,10 @@
 
 from django.contrib import admin
 
-from django.urls import path
+from django.urls import path, include
 
-from blog.views import home, categories
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", home, name="home"),
-    path("categories/", categories, name="categories"),
+    path("", include('blog.urls')),
 ]

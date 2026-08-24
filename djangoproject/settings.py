@@ -27,13 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-efh1y15^x+v-b((dl)79k@redlax7hy=+fq*g^um%m!0)twkx9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["simpleblog-mf3u.onrender.com",
-                 "localhost",
-                 "127.0.0.1"
-
-                 ]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -84,14 +80,21 @@ WSGI_APPLICATION = 'djangoproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': "neondb",
+#         'USER':"neondb_owner",
+#         'PASSWORD':"npg_JLq97iBznEXM",
+#         "HOST": "ep-fragrant-bar-auhspmov-pooler.c-10.us-east-1.aws.neon.tech",
+#         'PORT':5432,
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "neondb",
-        'USER':"neondb_owner",
-        'PASSWORD':"npg_JLq97iBznEXM",
-        "HOST": "ep-fragrant-bar-auhspmov-pooler.c-10.us-east-1.aws.neon.tech",
-        'PORT':5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

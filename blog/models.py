@@ -6,11 +6,11 @@ from django.db import models
 # Create your models here.
 # 设计"表格结构" 就像Excel的表头设计
 
-class BaseModel(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    class Meta:
-        abstract = True
+# class BaseModel(models.Model):
+#     created_at = models.DateTimeField(auto_now=True, null=True)
+#     updated_at = models.DateTimeField(auto_now_add=True, null=True)
+#     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+#     updated_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
 # 分类表
 class Category(models.Model):
@@ -40,7 +40,7 @@ class Post(models.Model):
         seconds = abs(now - db_time).total_seconds()
         return seconds
 
-class Comment(BaseModel):
+class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     body = models.TextField()
@@ -48,7 +48,7 @@ class Comment(BaseModel):
     def __str__(self):
         return self.post.title + ' - ' + self.body
 
-class Profile(BaseModel):
+class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField()
     profile_pic = models.ImageField(upload_to='images/profile/',
