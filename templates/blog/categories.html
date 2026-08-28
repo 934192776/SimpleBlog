@@ -1,64 +1,57 @@
+<!-- templates/blog/categories.html -->
 {% extends 'blog/Base.html' %}
-{% block title %}
-Categories
-{% endblock %}
+
+{% block title %}Categories{% endblock %}
+
 {% block content %}
+
 <h1>Categories</h1>
 
-    <form action="{% url 'category_create' %}"
-          method="post">
+<!-- ===== 创建分类 ===== -->
+<form action="{% url 'category_create' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="name" placeholder="category name">
+    <button type="submit">option</button>
+</form>
+
+<hr>
+
+<!-- ===== 显示所有分类 ===== -->
+{% for category in categories %}
+    <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+        
+        <!-- 分类名称 -->
+        <h3>{{ category.name }}</h3>
+        
+        <!-- ===== 更新分类 ===== -->
+        <form action="{% url 'category_update' category.id %}" method="post" style="display: inline;">
             {% csrf_token %}
-        <input type="text" name="name">
-        <button type="submit">Create</button>
-    </form>
-
-    <form action="{% url 'category_update' category.id %}"
-          method="post">
+            <input type="text" name="name" value="{{ category.name }}">
+            <button type="submit">update</button>
+        </form>
+        
+        <!-- ===== 删除分类 ===== -->
+        <form action="{% url 'category_delete' %}" method="post" style="display: inline;">
             {% csrf_token %}
-        <input type="text" name="name"
-               value="{{ category.name }}">
-        <button type="submit">Update</button>
-    </form>
-
-    <form action="{% url 'category_delete' %}"
-          method="post">
-            {% csrf_token %}
-        <input type="hidden" name="category_id"
-               value="{{ category.id}}">
-        <button type="submit">Delete</button>
-    </form>
-
-    {% for category in categories %}
-    <p>{{ category.name }}</p>
-
-
-        <form action="{% url 'post_create' %}"
-          method="post">
-            {% csrf_token %}
-        <input type="text" name="name">
-        <button type="submit">Create</button>
-    </form>
-
-        <form action="{% url 'post_update' post.id %}"
-          method="post">
-            {% csrf_token %}
-        <input type="text" name="name"
-               value="{{ post.name }}">
-        <button type="submit">Update</button>
-    </form>
-
-    <form action="{% url 'post_delete' %}"
-          method="post">
-            {% csrf_token %}
-        <input type="hidden" name="post_id"
-               value="{{ post.id}}">
-        <button type="submit">Delete</button>
-    </form>
-
-    {% for post in posts %}
-    <p>{{ post.name }}</p>
-
-
-    {% endfor %}
+            <input type="hidden" name="category_id" value="{{ category.id }}">
+            <button type="submit" onclick="return confirm('Are you sure to delete？')">delete</button>
+        </form>
+        
+        <!-- ===== 显示该分类下的文章 ===== -->
+        <p>article：</p>
+        <ul>
+            {% for post in category.post_set.all %}
+                <li>
+                    <a href="{% url 'post_detail' post.id %}">
+                        {{ post.title }}
+                    </a>
+                </li>
+            {% empty %}
+                <li>No article yet</li>
+            {% endfor %}
+        </ul>
+        
+    </div>
+{% endfor %}
 
 {% endblock %}

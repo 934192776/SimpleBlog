@@ -1,0 +1,81 @@
+<!-- templates/blog/post_update.html -->
+{% extends 'blog/Base.html' %}
+
+{% block title %}
+update article - {{ post.title }}
+{% endblock %}
+
+{% block content %}
+
+<h1>update article</h1>
+
+<form action="{% url 'post_update' post.id %}"
+      method="post"
+      enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    <!-- 标题 -->
+    <p>
+        Title:
+        <input type="text" name="title" value="{{ post.title }}">
+    </p>
+
+    <!-- 图片 -->
+    <p>
+        Picture:
+        <input type="file" name="header_image">
+        {% if post.header_image %}
+            <br>current picture<img src="{{ post.header_image.url }}" width="100">
+        {% endif %}
+    </p>
+
+    <!-- 标题标签 -->
+    <p>
+        Title Tag:
+        <input type="text" name="title_tag" value="{{ post.title_tag }}">
+    </p>
+
+    <!-- 作者（下拉选择） -->
+    <p>
+        Author:
+        <select name="author">
+            {% for user in users %}
+                <option value="{{ user.id }}"
+                        {% if user.id == post.author.id %}selected{% endif %}>
+                    {{ user.username }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <!-- 正文 -->
+    <p>
+        Body:
+        <textarea name="body" rows="10" cols="30">{{ post.body }}</textarea>
+    </p>
+
+    <!-- 摘要 -->
+    <p>
+        Snippet:
+        <input type="text" name="snippet" value="{{ post.snippet }}">
+    </p>
+
+    <!-- 分类（下拉选择） -->
+    <p>
+        Category:
+        <select name="category">
+            {% for category in categories %}
+                <option value="{{ category.id }}"
+                        {% if category.id == post.category.id %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+    </p>
+
+    <button type="submit">update article</button>
+    <a href="{% url 'posts' %}">cancel</a>
+</form>
+
+{% endblock %}

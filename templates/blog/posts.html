@@ -1,4 +1,4 @@
-{% extends '../Base.html' %}
+{% extends 'blog/Base.html' %}
 {% block title %}
 Posts
 {% endblock %}
@@ -8,7 +8,7 @@ Posts
     <h1>Posts</h1>
 
     <h2>Create Post</h2>
-    <form action=" % url 'post_create' %}"
+    <form action="{% url 'post_create' %}"
           method="post"
           enctype="multipart/form-data">
     {% csrf_token %}
@@ -41,15 +41,58 @@ Posts
         <button type="submit">Create</button>
 
     </form>
-    {% for post in posts %}
-         <p>{{ post.title }}</p>
-         <p>{{ post.body }}</p>
-    <!--Category -->
-        {{ post.category.name }}
+    <hr>
 
-     <!--Comments -->
-         {{ post.comment_set.all }}
+    <!-- ===== 显示所有文章 ===== -->
+<h2>ALL article</h2>
+    {% for post in posts %}
+         <div style="border: 1px solid #ddd; padding: 15px; margin-bottom: 20px;">
+
+        <!-- 文章标题 -->
+         <h3>{{ post.title }}</h3>
+
+        <!-- 文章正文 -->
+         <p>{{ post.body }}</p>
+
+
+    <!--Category 分类-->
+        <p>{{ post.category.name }}</p>
+
+        <!-- 作者 -->
+        <p>AuThor：{{ post.author.username }}</p>
+
+        <!-- 创建时间 -->
+        <p>publish date{{ post.post_date }}</p>
+
+     <!--Comments 评论-->
+        <p>{{ post.comment_set.all }}</p>
+
      <!--Likes -->
-        {{ post.likes.all }}
+        <p>{{ post.likes.all }}</p>
+
+         <!-- ===== ⭐ 新增：编辑和删除按钮 ===== -->
+        <p>
+            <!-- 编辑按钮 -->
+            <a href="{% url 'post_update' post.id %}"
+               style="background: #3498db; color: white; padding: 5px 10px;
+                      text-decoration: none; border-radius: 4px;">
+                Edit
+            </a>
+
+            <!-- 删除按钮（用表单提交，不是链接） -->
+            <form action="{% url 'post_delete' %}"
+                  method="post"
+                  style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <button type="submit"
+                        style="background: #e74c3c; color: white; padding: 5px 10px;
+                               border: none; border-radius: 4px; cursor: pointer;">
+                    delete
+                </button>
+            </form>
+        </p>
+    </div>
+
     {% endfor %}
 {% endblock %}
