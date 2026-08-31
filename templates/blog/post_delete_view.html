@@ -1,0 +1,17 @@
+{% extends 'blog/posts_delete_view.html' %}
+{% block title %}
+    Post Delete View
+{% endblock %}
+
+{% block content %}
+<p> Post Delete View
+</p>
+    <form method="post">
+            {% csrf_token %}
+
+    {{ form.as_table }}
+
+        <button class="btn btn_danger" type="submit">Create</button>
+    </form>
+
+{% endblock %}

@@ -37,14 +37,18 @@ My Blog
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'posts' %}">Posts</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'post_template_view' %}">Post Template View</a>
+                    </li>
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false">
-                            Dropdown
+                            Generic View
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">All Posts</a></li>
+                            <li><a class="dropdown-item" href="#">Create Post</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
                             <li>
                                 <hr class="dropdown-divider">

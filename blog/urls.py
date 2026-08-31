@@ -3,7 +3,8 @@ from django.urls import path
 # path = 用来定义URL路径和视图的对应关系
 
 from blog.views import home, categories, posts, category_detail, post_detail, category_create, category_update, \
-    category_delete, post_create, post_update, post_delete
+    category_delete, post_create, post_update, post_delete, PostList_Generic, PostDetail_Generic, \
+    PostUpdateView, PostCreateView, PostDeleteView, PostListTemplate
 
 # 从blog/views.py导入所有视图函数
 # 这样下面才能使用这些函数名
@@ -65,6 +66,26 @@ urlpatterns = [# urlpatterns = 路由列表（所有URL规则的集合）
     # 访问 /post/update/1/ 时，post_id = 1
     # 执行 post_update
 
-    path("post/delete/", post_delete, name="post_delete"),]
+    path("post/delete/", post_delete, name="post_delete"),
 # 删除分类（处理表单提交）
     # 访问 /post/delete/ 时执行 post_delete
+
+    path("post_template_view", PostListTemplate.as_view(),
+         name="post_template_view"),
+
+    path("post_list_view", PostList_Generic.as_view(),
+         name="post_list_view"),
+
+    path("post_detail_view/<int:pk>/",
+         PostDetail_Generic.as_view(),
+         name="post_detail_view"),
+
+    path("post_create_view", PostCreateView.as_view(),
+         name="post_create_view"),
+
+    path("post_update_view/<int:pk>/",PostUpdateView.as_view(),
+         name="post_update_view"),
+
+path("post_delete_view/<int:pk>/",PostDeleteView.as_view(),
+         name="post_delete_view"),
+    ]

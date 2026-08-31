@@ -1,0 +1,18 @@
+{% extends 'blog/posts_template_view.html' %}
+{% block title %}
+{{ post.title }}
+{% endblock %}
+
+{% block content %}
+<h1> Post Template View
+</h1>
+<p>
+    {{ category }}
+</p>
+<p>
+    {{ posts }}
+</p>
+<p>
+    {{ user }}
+</p>
+{% endblock %}

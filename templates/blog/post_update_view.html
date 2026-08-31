@@ -1,0 +1,17 @@
+{% extends 'blog/posts_update_view.html' %}
+{% block title %}
+    Post Update View
+{% endblock %}
+
+{% block content %}
+<p> Post Update View
+</p>
+    <form method="post">
+            {% csrf_token %}
+        <table>
+    {{ form.as_table }}
+        </table>
+        <button class="btn btn_primary" type="submit">Create</button>
+    </form>
+
+{% endblock %}

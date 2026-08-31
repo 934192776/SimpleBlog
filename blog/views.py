@@ -3,21 +3,28 @@ from django.contrib.auth.models import User
 # 这个user模型是django自带的，存了用户名，密码，邮箱
 
 from django.shortcuts import render, redirect
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
+
 # 导入"渲染"和“重定向”功能
 # render = 把html页面渲染出来显示给用户
 # redirect = 处理完请求后跳转到另一个页面
 
 
 from blog.models import Category, Post
+
+
 # 从blog应用的models.py中导入category和post模型
 # category = 分类（比如：内科，外科）
 # post = 文章/帖子
 
 
-
 # 首页视图， 定义一个叫“home”的视图函数
-def home(request): # request = 用户发来的请求（包含所有信息）
+def home(request):  # request = 用户发来的请求（包含所有信息）
     return render(request, 'blog/home.html')
+
+
 # render = 渲染页面功能
 #参数1： request 请求对象
 # 参数2： ‘blog/home.html'(要显示的html模板文件）
@@ -25,22 +32,20 @@ def home(request): # request = 用户发来的请求（包含所有信息）
 
 
 # 分类列表视图
-def categories(request):#从数据库查出所有分类
-    categories = Category.objects.all() #把所有分类存到变量categories里 # Category.bojects.all() = SELECT * FROM category
-    return render(request,# 把查到的categories数据传给模板
-                  'blog/categories.html',# 渲染categories.html页面
-                  {'categories': categories})# 模板里可以用{{categories}} 来显示数据
-
-
+def categories(request):  #从数据库查出所有分类
+    categories = Category.objects.all()  #把所有分类存到变量categories里 # Category.bojects.all() = SELECT * FROM category
+    return render(request,  # 把查到的categories数据传给模板
+                  'blog/categories.html',  # 渲染categories.html页面
+                  {'categories': categories})  # 模板里可以用{{categories}} 来显示数据
 
 
 # 文章列表页视图
 def posts(request):
-    posts = Post.objects.all() # 从数据库查出所有文章 # post.objects.all() = SELECT * FROM post
-    users = User.objects.all() # 从数据库查出所有用户 # User.objects.all() = SELECT * FROM user
-    categories = Category.objects.all()# 从数据库查出所有分类 # Category.objects.all() = SELECT * FROM category
+    posts = Post.objects.all()  # 从数据库查出所有文章 # post.objects.all() = SELECT * FROM post
+    users = User.objects.all()  # 从数据库查出所有用户 # User.objects.all() = SELECT * FROM user
+    categories = Category.objects.all()  # 从数据库查出所有分类 # Category.objects.all() = SELECT * FROM category
     return render(request,
-                  'blog/posts.html', # 渲染posts.html页面
+                  'blog/posts.html',  # 渲染posts.html页面
                   {
                       'posts': posts,
                       'users': users,
@@ -48,34 +53,31 @@ def posts(request):
                   })
 
 
-
-
 #单个分类详情页视图
-def category_detail(request, category_id): # category_id = 从URL中提取的分类
-    category = Category.objects.get(id=category_id) # Category.objects.get(id=category_id) = SELECT *FROM category WHERE id=1
+def category_detail(request, category_id):  # category_id = 从URL中提取的分类
+    category = Category.objects.get(
+        id=category_id)  # Category.objects.get(id=category_id) = SELECT *FROM category WHERE id=1
     # 根据id从数据库查出某个分类 # 用户访问/category/1/时，category_id = 1
-    return render(request, "blog/category_detail.html", # 渲染category_detail.html页面
-                  {'category': category}) # 把查到的category数据传给模板
-
-
+    return render(request, "blog/category_detail.html",  # 渲染category_detail.html页面
+                  {'category': category})  # 把查到的category数据传给模板
 
 
 # 单篇文章详情页视图
-def post_detail(request, post_id):# post_id = 从URL中提取的分类
-    post = Post.objects.get(id=post_id) # Post.objects.get(id=post_id) = SELECT * FROM post WHERE id=1
+def post_detail(request, post_id):  # post_id = 从URL中提取的分类
+    post = Post.objects.get(id=post_id)  # Post.objects.get(id=post_id) = SELECT * FROM post WHERE id=1
     # 根据id从数据库查出某篇文章  # 用户访问/post时，post_id = 1
-    return render(request, "blog/post_detail.html", # 渲染post_detail.html页面
-                  {'post': post})# 把查到的post数据传给模板
+    return render(request, "blog/post_detail.html",  # 渲染post_detail.html页面
+                  {'post': post})  # 把查到的post数据传给模板
 
 
 # 创建分类的视图（处理表单提交）
 def category_create(request):
-     # 从用户提交的POST数据中获取分类名称
+    # 从用户提交的POST数据中获取分类名称
     category_name = request.POST['name']
-     # request.POST = 用户提交的表单数据
+    # request.POST = 用户提交的表单数据
     category = Category.objects.create(name=category_name)
-     # 在数据库里创建一条新分类记录
-     # Category.objects.create(name=category_name = INSERT INTO category(name) VALUE('新分类 '）
+    # 在数据库里创建一条新分类记录
+    # Category.objects.create(name=category_name = INSERT INTO category(name) VALUE('新分类 '）
     return redirect('categories')
     # 处理完后重定向到“分类列表 ”页面
     # redirect('categories') = 跳转到名字叫‘categories' 的页面
@@ -89,7 +91,7 @@ def category_update(request, category_id):
     category.name = request.POST['name']
     # 把分类名称改成用户提交的新名称
     # request.POST['name'] = 表单里输入的新名称
-    category.save() # 保存到数据库  # .save()= UPDATE category SET name= '新名称 ’ WHERE id=category_id
+    category.save()  # 保存到数据库  # .save()= UPDATE category SET name= '新名称 ’ WHERE id=category_id
     return redirect('categories')
     # 重定向到分类列表页
 
@@ -106,7 +108,6 @@ def category_delete(request):
     # 重定向到分类列表页
 
 
-
 # 创建文章的视图
 def post_create(request):
     title = request.POST['title']
@@ -121,22 +122,21 @@ def post_create(request):
     # 从表单获取作者ID，然后从数据库查出对应的用户对象
     # request.POST['author']= 下拉选择框选中的作者ID
 
-    body = request.POST['body'] # 从表单获取正文
-    snippet = request.POST['snippet'] # 从表单获取摘要
+    body = request.POST['body']  # 从表单获取正文
+    snippet = request.POST['snippet']  # 从表单获取摘要
     category = Category.objects.get(id=request.POST['category'])
     # 从表单获取分类ID，然后查出对应的分类对象
 
-    post = Post.objects.create( # 在数据库里创建新文章， 把所有字段传进去
-                               title=title,
-                               header_image=header_image,
-                               title_tag=title_tag,
-                               author=author, # 传入用户对象（外键）
-                               body=body,
-                               snippet=snippet,
-                               category=category) # 传入分类对象（外键）
+    post = Post.objects.create(  # 在数据库里创建新文章， 把所有字段传进去
+        title=title,
+        header_image=header_image,
+        title_tag=title_tag,
+        author=author,  # 传入用户对象（外键）
+        body=body,
+        snippet=snippet,
+        category=category)  # 传入分类对象（外键）
     return redirect('posts')
     # 创建成功后重定向到文章列表页
-
 
 
 # 更新文章的视图
@@ -208,6 +208,10 @@ def post_delete(request):
 
 # 还需要修改 post_create 视图，因为模板里用到了 users 和 categories
 
+class TemplateView:
+    pass
+
+
 def post_create(request):
     """
     创建文章（修改版 - 支持GET和POST）
@@ -242,3 +246,47 @@ def post_create(request):
             category=category
         )
         return redirect('posts')
+
+
+class PostListTemplate(TemplateView):
+    template_name = 'blog/post_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = Post.objects.all()
+        context['categories'] = Category.objects.all()
+        context['users'] = User.objects.all()
+        print(context)
+        print(type(context))
+        return context
+
+
+class PostList_Generic(ListView):
+    model = Post
+    template_name = "blog/posts_list_view.html"
+
+class PostDetail_Generic(DetailView):
+    model = Post
+    template_name = "blog/posts_detail_view.html"
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = "blog/post_create_view.html"
+    success_url = "/post_list_view"
+    # form_class =
+    fields = ['title', 'header_image', 'title_tag',
+              'author', 'body', 'snippet', 'category'
+]
+
+class PostUpdateView(UpdateView):
+    model = Post
+    template_name = "blog/post_update_view.html"
+    success_url = "/post_list_view"
+    form_class = PostCreateView
+
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = "blog/post_delete_view.html"
+    success_url = "/post_list_view"
+
+
