@@ -1,0 +1,12 @@
+{% extends "blog/Base.html" %}
+
+{% block content %}
+    <h2>Register</h2>
+    <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <p>Username: <input type="text" name="username"></p>
+        <p>Password: <input type="password" name="password"></p>
+        <p>Email: <input type="email" name="email"></p>
+        <button type="submit">Register</button>
+    </form>
+{% endblock %}

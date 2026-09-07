@@ -4,16 +4,22 @@
 {% endblock %}
 
 {% block content %}
+    {% if user.is_authenticated %}
+
 <h1> Post Create View
 </h1>
 
 
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
         <table>
     {{ form.as_table }}
         </table>
         <button class="btn btn_primary" type="submit">Create</button>
     </form>
+    {% else %}
+    <p>You are not logged in
+        <a href="{% url 'login' %}">Login</a>
+    </p>
 
 {% endblock %}

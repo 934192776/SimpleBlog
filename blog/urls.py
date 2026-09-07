@@ -4,7 +4,7 @@ from django.urls import path
 
 from blog.views import home, categories, posts, category_detail, post_detail, category_create, category_update, \
     category_delete, post_create, post_update, post_delete, PostList_Generic, PostDetail_Generic, \
-    PostUpdateView, PostCreateView, PostDeleteView, PostListTemplate
+    PostUpdateView, PostCreateView, PostDeleteView, PostListTemplate, register_view, register
 
 # 从blog/views.py导入所有视图函数
 # 这样下面才能使用这些函数名
@@ -88,4 +88,8 @@ urlpatterns = [# urlpatterns = 路由列表（所有URL规则的集合）
 
 path("post_delete_view/<int:pk>/",PostDeleteView.as_view(),
          name="post_delete_view"),
+
+    path("register_form/", register_view, name="register_form"),
+    path("register/", register, name="register"),
+
     ]

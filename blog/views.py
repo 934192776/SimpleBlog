@@ -3,9 +3,13 @@ from django.contrib.auth.models import User
 # 这个user模型是django自带的，存了用户名，密码，邮箱
 
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.list import ListView
+from django.views.generic import ListView
+from .models import Post
+from django.contrib.auth.models import Group
 
 # 导入"渲染"和“重定向”功能
 # render = 把html页面渲染出来显示给用户
@@ -19,6 +23,11 @@ from blog.models import Category, Post
 # category = 分类（比如：内科，外科）
 # post = 文章/帖子
 
+class PostListTemplate(ListView):
+    model = Post
+    template_name = 'blog/post_list_template.html'
+    context_object_name = 'posts'
+    ordering = ['-post_date']
 
 # 首页视图， 定义一个叫“home”的视图函数
 def home(request):  # request = 用户发来的请求（包含所有信息）
@@ -290,3 +299,70 @@ class PostDeleteView(DeleteView):
     success_url = "/post_list_view"
 
 
+def register(request):
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    email = request.POST.get('email')
+    user = User.objects.create_user(username=username, email=email)
+    user.set_password(password)
+    user.groups.add(1)
+    user.save()
+    return redirect('login')
+# 先获取 Group 对象
+    group = Group.objects.get(name='editor')
+    user.groups.add(group)
+
+def register_view(request):
+    return render(request, 'blog/register.html')
+
+
+def like_dislike(request):
+    login_user = request.user
+    post = Post.objects.get(id=request.POST['post_id'])
+    if login_user in post.likes.all():
+        post.likes.remove(login_user)
+    else:
+        post.likes.add(login_user)
+    return redirect('post_detail_view', pk=post.id)
+
+
+
+# 1. PostListTemplate
+class PostListTemplate(ListView):
+    model = Post
+    template_name = 'blog/post_list_template.html'
+    context_object_name = 'posts'
+    ordering = ['-post_date']
+
+# 2. PostList_Generic
+class PostList_Generic(ListView):
+    model = Post
+    template_name = 'blog/post_list_generic.html'
+    context_object_name = 'posts'
+    ordering = ['-post_date']
+
+# 3. PostDetail_Generic
+class PostDetail_Generic(DetailView):
+    model = Post
+    template_name = 'blog/post_detail_generic.html'
+    context_object_name = 'post'
+
+# 4. PostCreateView
+class PostCreateView(CreateView):
+    model = Post
+    fields = ['title', 'header_image', 'title_tag', 'author', 'body', 'snippet', 'category']
+    template_name = 'blog/post_create_generic.html'
+    success_url = reverse_lazy('posts')
+
+# 5. PostUpdateView
+class PostUpdateView(UpdateView):
+    model = Post
+    fields = ['title', 'header_image', 'title_tag', 'author', 'body', 'snippet', 'category']
+    template_name = 'blog/post_update_generic.html'
+    success_url = reverse_lazy('posts')
+
+# 6. PostDeleteView
+class PostDeleteView(DeleteView):
+    model = Post
+    template_name = 'blog/post_delete_generic.html'
+    success_url = reverse_lazy('posts')

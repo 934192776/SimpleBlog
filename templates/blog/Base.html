@@ -40,6 +40,28 @@ My Blog
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'post_template_view' %}">Post Template View</a>
                     </li>
+                    {% if not user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+
+
+                        <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'register_form' %}">Register</a>
+                    </li>
+
+                    {% else %}
+                      <li class="nav-item">
+                        <form method="post" action="{%  url 'logout' %}">
+                          {% csrf_token %}
+                           <button type="submit">Logout</button>
+                        </form>
+                      </li>
+                    {% endif %}
+
+
 
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
